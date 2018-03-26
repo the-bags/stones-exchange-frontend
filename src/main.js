@@ -3,7 +3,9 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Quote from './components/Quote'
+import NavBar from './components/NavBar'
 import router from './router'
+// import template from './templates/main.html'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -14,6 +16,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  template: '<Quote/>',
-  components: { Quote }
+  template: '<NavBar/>',
+  components: { Quote, NavBar }
 })
