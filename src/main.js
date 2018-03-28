@@ -16,6 +16,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  template: '<NavBar/>',
+  template: '<div><router-view></router-view></div>',
   components: { Quote, NavBar }
 })

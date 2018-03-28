@@ -1,5 +1,5 @@
 <template>
-  <div id="quote">
+  <div id="navbar">
 <b-navbar toggleable="md" type="dark" variant="info">
 
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
