@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Quote from './components/Quote'
+import Register from './components/Register'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -16,4 +17,11 @@ new Vue({
   router,
   template: '<Quote/>',
   components: { Quote }
+})
+
+new Vue({
+  el: '#app',
+  router,
+  template: '<Register/>',
+  components: { Register }
 })
