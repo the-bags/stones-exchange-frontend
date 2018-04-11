@@ -49,7 +49,6 @@ export default {
       ctx.font = "20px Georgia";
       ctx.fillText(this.exampleContent, 10, 50);
       this.stonesArray.forEach((stone) => {
-        console.log(stone);
         ctx.beginPath();
         ctx.arc(stone.x, stone.y, 10, 0, 2 * Math.PI);
         ctx.fillStyle = this.getRndColor();
