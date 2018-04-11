@@ -45,3 +45,7 @@ npm i
 # Fire up the dev server with HMR
 npm run dev
 ```
+
+#### Links
+* Main page - http://localhost:8080/
+* Space page - http://localhost:8080/#/space
