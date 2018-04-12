@@ -1,9 +1,8 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Quote from "@/components/Quote";
-import Space from "@/components/Space";
+import Vue from 'vue'
+import Router from 'vue-router'
+import Hello from '@/components/Hello'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
@@ -16,6 +15,11 @@ export default new Router({
       path: "/space",
       name: "Space",
       component: Space
+    },
+    {
+      path: '/users',
+      name: 'UserList',
+      component: UserListPage
     }
   ]
 });
