@@ -16,8 +16,9 @@
 
 <script>
 export default {
-  name: "quote"
+  name: 'quote'
 };
+
 </script>
 
 <style>

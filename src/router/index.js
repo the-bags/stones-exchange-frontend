@@ -1,22 +1,23 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Register from '@/components/Register'
-import NavBar from '@/components/NavBar'
-import Quote from '@/components/Quote'
-import UserListPage from '../components/UserListPage'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Register from '@/components/Register';
+import Space from '@/components/Space';
+import NavBar from '@/components/NavBar';
+import Quote from '@/components/Quote';
+import UserListPage from '../components/UserListPage';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: "/",
-      name: "Quote",
+      path: '/',
+      name: 'Quote',
       component: Quote
     },
     {
-      path: "/space",
-      name: "Space",
+      path: '/space',
+      name: 'Space',
       component: Space
     },
     {
@@ -35,4 +36,4 @@ export default new Router({
       component: NavBar
     }
   ]
-})
+});
