@@ -8,6 +8,8 @@ import Register from './components/Register'
 import Space from "./components/Space";
 import UserListPage from './components/UserListPage'
 import router from './router'
+import NavBar from './components/NavBar'
+// import template from './templates/main.html'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -26,6 +28,6 @@ new Vue({
 new Vue({
   el: '#app',
   router,
-  template: '<Register/>',
-  components: { Register }
+  template: '<div><router-view></router-view></div>',
+  components: { Quote, NavBar, Register }
 })
