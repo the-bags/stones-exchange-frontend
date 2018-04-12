@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Register from '@/components/Register'
 import NavBar from '@/components/NavBar'
 import Quote from '@/components/Quote'
+import UserListPage from '../components/UserListPage'
 
 Vue.use(Router)
 
