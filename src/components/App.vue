@@ -7,7 +7,12 @@
 
 <script>
 export default {
-  name: "app"
+  name: "app",
+  data: () => {
+    return {
+      backendUrl: 'http://localhost:3000'
+    }
+  }
 };
 </script>
 

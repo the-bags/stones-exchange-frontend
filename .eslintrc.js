@@ -29,6 +29,7 @@ module.exports = {
       "error",
       "always"
     ],
+    "space-before-function-paren": 0,
     "indent": ["error", 2],
     "comma-spacing": [2, {"before": false, "after": true}],
     "no-console": "off",

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Register from '@/components/Register';
+import RegisterPage from '@/components/RegisterPage';
+import LoginPage from '@/components/LoginPage';
 import Space from '@/components/Space';
 import NavBar from '@/components/NavBar';
 import Quote from '@/components/Quote';
@@ -27,8 +28,13 @@ export default new Router({
     },
     {
       path: '/user/register',
-      name: 'Register',
-      component: Register
+      name: 'RegisterPage',
+      component: RegisterPage
+    },
+    {
+      path: '/user/login',
+      name: 'LoginPage',
+      component: LoginPage
     },
     {
       path: '/test',
