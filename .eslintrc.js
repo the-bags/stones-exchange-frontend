@@ -17,10 +17,10 @@ module.exports = {
   ],
     // add your custom rules here
   "rules": {
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    // "linebreak-style": [
+    //   "error",
+    //   "windows"
+    // ],
     "quotes": [
       "error",
       "single"
