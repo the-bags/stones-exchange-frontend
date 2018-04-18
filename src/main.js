@@ -30,7 +30,7 @@ new Vue({
     customEmit: function (val) {
       console.log('Server said me', val);
       this.$socket.emit('say_for_server', {
-        massege: 'Hello Server!'
+        message: 'Hello Server!'
       });
     }
   }
