@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import auth from '../auth';
   export default {
     name: 'LoginPage',
     data: () => {
@@ -41,14 +42,7 @@
     },
     methods: {
       submit() {
-        this.$http.post(`${this.backendUrl}/login`, this.credentials)
-          .then(() => {
-            // TODO handle successful login
-            this.$router.push('/');
-          })
-          .catch(err => {
-            err.status === 403 ? this.$router.push('/user/register') : console.error(err);
-          });
+        auth.login(this, this.credentials, '/');
       }
     }
   };

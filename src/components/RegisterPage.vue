@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import auth from '../auth';
   export default {
     name: 'register',
     data: () => {
@@ -52,10 +53,7 @@
     methods: {
       submit() {
         if (this.registerData.password === this.passwordConfirmation) {
-          this.$http.post(`${this.backendUrl}/register`, this.registerData)
-            .catch(err => {
-              console.error(err);
-            });
+          auth.register(this, this.registerData, '/');
         } else {
           // TODO add password & password confirmation mismatch handling
         }

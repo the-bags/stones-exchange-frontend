@@ -1,28 +1,13 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
-  </div>
+ <template>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a v-link="'home'">Home</a></li>
+          <li><a v-link="'login'">Login</a></li>
+          <li><a v-link="'signup'">Sign Up</a></li>
+          <li><a v-link="'test'">Secret Quote</a></li>
+          <li><a v-link="'login'">Logout</a></li>
+        </ul>
+      </div>    
+    </nav>
 </template>
-
-<script>
-export default {
-  name: "app",
-  data: () => {
-    return {
-      backendUrl: 'http://localhost:3000'
-    }
-  }
-};
-</script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
