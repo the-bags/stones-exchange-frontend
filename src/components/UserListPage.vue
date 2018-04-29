@@ -6,6 +6,7 @@
 </template>
 
 <script>
+  import env from '@/env';
   export default {
     name: 'user-list-page',
     data () {
@@ -18,7 +19,7 @@
     },
     methods: {
       getUserList () {
-        this.$http.get('http://localhost:3001/user').then(list => {
+        this.$http.get(env.API_URL + 'user').then(list => {
           this.userList = list.data;
         });
       }

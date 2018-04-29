@@ -29,11 +29,12 @@
 
 <script>
   import auth from '../auth';
+  import env from '@/env';
   export default {
     name: 'LoginPage',
     data: () => {
       return {
-        backendUrl: 'http://localhost:3001',
+        backendUrl: env.API_URL,
         credentials: {
           email: '',
           password: ''
@@ -42,7 +43,7 @@
     },
     methods: {
       submit() {
-        auth.login(this, this.credentials, '/');
+        auth.login(this.credentials, '/');
       }
     }
   };

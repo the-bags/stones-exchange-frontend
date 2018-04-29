@@ -58,10 +58,7 @@ export default {
   },
   methods: {
     logout() {
-      auth.logout(this, '/');
-    },
-    isAuthorized() {
-      return auth.isAuthorized();
+      auth.logout('/');
     }
   }
 };
