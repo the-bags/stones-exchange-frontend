@@ -31,7 +31,7 @@
       <b-nav-item-dropdown right>
         <!-- Using button-content slot -->
         <template slot="button-content">
-          <em v-if="auth.user.authenticated">User is authorized</em>
+          <em v-if="auth.user.authenticated">{{ auth.user.name }}</em>
           <em v-else>Please log in</em>
         </template>
         <b-dropdown-item href="#/user/login">Login</b-dropdown-item>

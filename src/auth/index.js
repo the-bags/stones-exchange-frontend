@@ -8,7 +8,9 @@ export default {
 
   // User object will let us check authentication status
   user: {
-    authenticated: localStorage.getItem('authenticated')
+    authenticated: localStorage.getItem('authenticated'),
+    name: '',
+    email: ''
   },
 
   // Send a request to the login URL and save the returned JWT
@@ -19,8 +21,11 @@ export default {
         localStorage.setItem('id_token', data.id_token);
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('authenticated', true);
+        console.log('login data =>', data);
 
         this.user.authenticated = true;
+        this.user.name = data.body.user.name;
+        this.user.email = data.body.user.email;
 
         if (redirect) {
           router.push(redirect);
@@ -41,6 +46,8 @@ export default {
         localStorage.setItem('authenticated', true);
 
         this.user.authenticated = true;
+        this.user.name = data.body.user.name;
+        this.user.email = data.body.user.email;
 
         if (redirect) {
           router.push(redirect);
@@ -56,6 +63,8 @@ export default {
     localStorage.removeItem('access_token');
     localStorage.removeItem('authenticated');
     this.user.authenticated = false;
+    this.user.name = '';
+    this.user.email = '';
     if (redirect) {
       router.push(redirect);
     }
