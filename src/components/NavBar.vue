@@ -31,10 +31,13 @@
       <b-nav-item-dropdown right>
         <!-- Using button-content slot -->
         <template slot="button-content">
-          <em>User</em>
+          <em v-if="auth.user.authenticated">User is authorized</em>
+          <em v-else>Please log in</em>
         </template>
+        <b-dropdown-item href="#/user/login">Login</b-dropdown-item>
+        <b-dropdown-item href="#/user/register">Register</b-dropdown-item>
+        <b-dropdown-item v-on:click="logout">Logout</b-dropdown-item>
         <b-dropdown-item href="#">Profile</b-dropdown-item>
-        <b-dropdown-item href="#">Signout</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
 
@@ -45,10 +48,20 @@
 </template>
 
 <script>
+import auth from '../auth';
 export default {
-  name: 'navbar'
+  name: 'navbar',
+  data() {
+    return {
+      auth: auth
+    };
+  },
+  methods: {
+    logout() {
+      auth.logout('/');
+    }
+  }
 };
-
 </script>
 
 <style>

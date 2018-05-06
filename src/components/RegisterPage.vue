@@ -36,11 +36,13 @@
 </template>
 
 <script>
+  import auth from '../auth';
+  import env from '@/env';
   export default {
     name: 'register',
     data: () => {
       return {
-        backendUrl: 'http://localhost:3001',
+        backendUrl: env.API_URL,
         registerData: {
           name: '',
           email: '',
@@ -52,10 +54,7 @@
     methods: {
       submit() {
         if (this.registerData.password === this.passwordConfirmation) {
-          this.$http.post(`${this.backendUrl}/register`, this.registerData)
-            .catch(err => {
-              console.error(err);
-            });
+          auth.register(this.registerData, '/');
         } else {
           // TODO add password & password confirmation mismatch handling
         }

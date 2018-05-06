@@ -5,6 +5,8 @@ import LoginPage from '@/components/LoginPage';
 import Space from '@/components/Space';
 import NavBar from '@/components/NavBar';
 import Quote from '@/components/Quote';
+import Home from '@/components/Home';
+import App from '@/components/App';
 import UserListPage from '../components/UserListPage';
 
 Vue.use(Router);
@@ -40,6 +42,16 @@ export default new Router({
       path: '/test',
       name: 'NavBar',
       component: NavBar
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/app',
+      name: 'App',
+      component: App
     }
   ]
 });
