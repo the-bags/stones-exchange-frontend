@@ -37,12 +37,11 @@
 
 <script>
   import auth from '../auth';
-  import env from '@/env';
   export default {
     name: 'register',
     data: () => {
       return {
-        backendUrl: env.API_URL,
+        backendUrl: process.env.API_URL,
         registerData: {
           name: '',
           email: '',

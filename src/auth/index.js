@@ -2,25 +2,30 @@
 import router from '../router';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
-import env from '@/env';
 
 export default {
 
   // User object will let us check authentication status
   user: {
-    authenticated: localStorage.getItem('authenticated')
+    authenticated: localStorage.getItem('authenticated'),
+    name: '',
+    email: ''
   },
 
   // Send a request to the login URL and save the returned JWT
   login(credentials, redirect) {
+    console.log('==>' + process.env.LOGIN_URL);
     Vue.use(VueResource);
-    Vue.http.post(env.LOGIN_URL, credentials)
+    Vue.http.post(process.env.LOGIN_URL, credentials)
       .then((data) => {
         localStorage.setItem('id_token', data.id_token);
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('authenticated', true);
+        console.log('login data =>', data);
 
         this.user.authenticated = true;
+        this.user.name = data.body.user.name;
+        this.user.email = data.body.user.email;
 
         if (redirect) {
           router.push(redirect);
@@ -33,7 +38,7 @@ export default {
 
   register(credentials, redirect) {
     Vue.use(VueResource);
-    Vue.http.post(env.REGISTER_URL, credentials)
+    Vue.http.post(process.env.REGISTER_URL, credentials)
       .then((data) => {
         console.log('data', data);
         localStorage.setItem('id_token', data.id_token);
@@ -41,6 +46,8 @@ export default {
         localStorage.setItem('authenticated', true);
 
         this.user.authenticated = true;
+        this.user.name = data.body.user.name;
+        this.user.email = data.body.user.email;
 
         if (redirect) {
           router.push(redirect);
@@ -56,6 +63,8 @@ export default {
     localStorage.removeItem('access_token');
     localStorage.removeItem('authenticated');
     this.user.authenticated = false;
+    this.user.name = '';
+    this.user.email = '';
     if (redirect) {
       router.push(redirect);
     }
