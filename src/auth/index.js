@@ -2,7 +2,6 @@
 import router from '../router';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
-import env from '@/env';
 
 export default {
 
@@ -15,8 +14,9 @@ export default {
 
   // Send a request to the login URL and save the returned JWT
   login(credentials, redirect) {
+    console.log('==>' + process.env.LOGIN_URL);
     Vue.use(VueResource);
-    Vue.http.post(env.LOGIN_URL, credentials)
+    Vue.http.post(process.env.LOGIN_URL, credentials)
       .then((data) => {
         localStorage.setItem('id_token', data.id_token);
         localStorage.setItem('access_token', data.access_token);
@@ -38,7 +38,7 @@ export default {
 
   register(credentials, redirect) {
     Vue.use(VueResource);
-    Vue.http.post(env.REGISTER_URL, credentials)
+    Vue.http.post(process.env.REGISTER_URL, credentials)
       .then((data) => {
         console.log('data', data);
         localStorage.setItem('id_token', data.id_token);
