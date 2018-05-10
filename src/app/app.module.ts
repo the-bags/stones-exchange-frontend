@@ -15,6 +15,6 @@ import { AppRoutingModule } from './/app-routing.module';
     NgbModule.forRoot(), BrowserModule, AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent, QuoteComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
