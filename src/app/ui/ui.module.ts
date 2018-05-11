@@ -4,9 +4,12 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
+import { ComponentsModule } from './components/components.module';
+
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    ComponentsModule
   ],
   declarations: [LayoutComponent, HeaderComponent, FooterComponent],
   exports: [LayoutComponent]
