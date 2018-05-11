@@ -9,6 +9,7 @@ import { LoginpageComponent } from './loginpage/loginpage.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SpaceComponent } from './space/space.component';
 import { RegisterpageComponent } from './registerpage/registerpage.component';
+import { UiModule } from './ui/ui.module';
 
 @NgModule({
   declarations: [
@@ -17,10 +18,10 @@ import { RegisterpageComponent } from './registerpage/registerpage.component';
     LoginpageComponent,
     NavbarComponent,
     SpaceComponent,
-    RegisterpageComponent
+    RegisterpageComponent,
   ],
   imports: [
-    NgbModule.forRoot(), BrowserModule, AppRoutingModule
+    NgbModule.forRoot(), BrowserModule, AppRoutingModule, UiModule
   ],
   providers: [],
   bootstrap: [AppComponent]
