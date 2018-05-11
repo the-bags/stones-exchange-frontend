@@ -9,6 +9,7 @@ import { RegisterpageComponent } from './ui/components/registerpage/registerpage
 
 import { ComponentsModule } from './ui/components/components.module';
 const routes: Routes = [
+  { path: '', component: QuoteComponent },
   { path: 'qoute', component: QuoteComponent },
   { path: 'loginpage', component: LoginpageComponent},
   { path: 'navbar', component: NavbarComponent},
