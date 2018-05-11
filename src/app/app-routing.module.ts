@@ -7,7 +7,7 @@ import { SpaceComponent } from './space/space.component';
 import { RegisterpageComponent } from './registerpage/registerpage.component';
 
 const routes: Routes = [
-  { path: 'test', component: QuoteComponent },
+  { path: 'qoute', component: QuoteComponent },
   { path: 'loginpage', component: LoginpageComponent},
   { path: 'navbar', component: NavbarComponent},
   { path: 'space', component: SpaceComponent},
