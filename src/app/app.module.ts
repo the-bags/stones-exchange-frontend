@@ -5,11 +5,19 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { QuoteComponent } from './quote/quote.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { LoginpageComponent } from './loginpage/loginpage.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SpaceComponent } from './space/space.component';
+import { RegisterpageComponent } from './registerpage/registerpage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    QuoteComponent
+    QuoteComponent,
+    LoginpageComponent,
+    NavbarComponent,
+    SpaceComponent,
+    RegisterpageComponent
   ],
   imports: [
     NgbModule.forRoot(), BrowserModule, AppRoutingModule
