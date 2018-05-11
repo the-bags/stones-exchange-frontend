@@ -11,15 +11,16 @@
             Menu
           </a>
           <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="loginpage">Login</a>
-            <a class="dropdown-item" href="registerpage">Register</a>
+            <a class="dropdown-item" *ngIf="!authService.user.authenticated" href="loginpage">Login</a>
+            <a class="dropdown-item" *ngIf="!authService.user.authenticated" href="registerpage">Register</a>
             <a class="dropdown-item" href="space">Space</a>
+            <a class="dropdown-item" *ngIf="authService.user.authenticated" (click)="authService.logout()">Logout</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="qoute">Quote</a>
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">name</a>
+          <a class="nav-link disabled" href="#">{{authService.user.name}}</a>
         </li>
       </ul>
     </div>

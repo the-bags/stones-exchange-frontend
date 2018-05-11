@@ -2,27 +2,86 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+interface IUser {
+  authenticated: boolean;
+  name: string;
+  email: string;
+}
+
+interface IResponse {
+  user: IUser;
+  id_token: string;
+  access_token: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router: Router, private http: HttpClient) { }
+  user: IUser;
+
+  constructor(private router: Router, private http: HttpClient) {
+    this.user = {
+      authenticated: localStorage.getItem('authenticated') === 'true' ? true : false,
+      name: localStorage.getItem('user_name') ? localStorage.getItem('user_name') : '',
+      email: localStorage.getItem('user_name') ? localStorage.getItem('user_name') : ''
+    };
+    console.log(this.user);
+  }
 
   login(email: string, password: string) {
-    console.log('SERVICE ==>', email, password);
       this.http.post('http://127.0.0.1:3001/login', {
           email,
           password
       }).subscribe(
-        res => {
+        (res: IResponse) => {
           console.log(res);
+          this.user.authenticated = true;
+          this.user.name = res.user.name;
+          this.user.email = res.user.email;
+          localStorage.setItem('id_token', res.id_token);
+          localStorage.setItem('access_token', res.access_token);
+          localStorage.setItem('authenticated', 'true');
+          localStorage.setItem('user_name', this.user.name);
+          localStorage.setItem('user_email', this.user.email);
           this.router.navigate(['/']);
         },
         err => {
-          console.log('Error occured');
-          this.router.navigate(['/registerpage']);
+          err.status === 403 ? this.router.navigate(['/registerpage']) : console.error(err);
         }
       );
   }
+    logout() {
+      localStorage.removeItem('id_token');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('authenticated');
+      localStorage.removeItem('user_name');
+      localStorage.removeItem('user_email');
+      this.user.authenticated = false;
+      this.user.name = '';
+      this.user.email = '';
+      this.router.navigate(['/loginpage']);
+    }
+
+    register(credentials) {
+      this.http.post('http://localhost:3001/register', credentials).subscribe(
+        (res: IResponse) => {
+          console.log(res);
+          this.user.authenticated = true;
+          this.user.name = res.user.name;
+          this.user.email = res.user.email;
+          localStorage.setItem('id_token', res.id_token);
+          localStorage.setItem('access_token', res.access_token);
+          localStorage.setItem('authenticated', 'true');
+          localStorage.setItem('user_name', this.user.name);
+          localStorage.setItem('user_email', this.user.email);
+          this.router.navigate(['/']);
+        },
+        err => {
+          err.status === 403 ? this.router.navigate(['/registerpage']) : console.error(err);
+        }
+      );
+    }
+
 }

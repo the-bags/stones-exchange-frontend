@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-registerpage',
@@ -7,9 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterpageComponent implements OnInit {
 
-  constructor() { }
+  @Input() test: string;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+  }
+
+  submit(
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) {
+    if (password === confirmPassword) {
+      this.authService.register({
+        name,
+        email,
+        password
+      });
+    }
+
+    console.log(this.test);
   }
 
 }
