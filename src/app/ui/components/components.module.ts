@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { QuoteComponent } from './quote/quote.component';
@@ -11,7 +12,8 @@ import { RegisterpageComponent } from './registerpage/registerpage.component';
 @NgModule({
   imports: [
     CommonModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    FormsModule
   ],
   declarations: [
     QuoteComponent,

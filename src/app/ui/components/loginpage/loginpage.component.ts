@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-loginpage',
@@ -13,4 +14,8 @@ export class LoginpageComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit(credentials: NgForm) {
+    this.authService.login(credentials.value);
+  }
+  
 }

@@ -30,11 +30,8 @@ export class AuthService {
     console.log(this.user);
   }
 
-  login(email: string, password: string) {
-      this.http.post('http://127.0.0.1:3001/login', {
-          email,
-          password
-      }).subscribe(
+  login(credentials) {
+      this.http.post('http://127.0.0.1:3001/login', credentials).subscribe(
         (res: IResponse) => {
           console.log(res);
           this.user.authenticated = true;

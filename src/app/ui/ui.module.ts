@@ -9,7 +9,7 @@ import { ComponentsModule } from './components/components.module';
 @NgModule({
   imports: [
     CommonModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   declarations: [LayoutComponent, HeaderComponent, FooterComponent],
   exports: [LayoutComponent]

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-registerpage',
@@ -15,21 +16,13 @@ export class RegisterpageComponent implements OnInit {
   ngOnInit() {
   }
 
-  submit(
-    name: string,
-    email: string,
-    password: string,
-    confirmPassword: string
-  ) {
-    if (password === confirmPassword) {
-      this.authService.register({
-        name,
-        email,
-        password
-      });
-    }
+  onSubmit(credentials: NgForm) {
+    this.authService.register(credentials.value);
+  }
 
-    console.log(this.test);
+  isConfirm(credentials: NgForm) {
+    return credentials.value.password === credentials.value.confirm 
+           && credentials.value.password !== '';
   }
 
 }
