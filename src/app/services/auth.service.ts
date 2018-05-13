@@ -25,7 +25,7 @@ export class AuthService {
     this.user = {
       authenticated: localStorage.getItem('authenticated') === 'true' ? true : false,
       name: localStorage.getItem('user_name') ? localStorage.getItem('user_name') : '',
-      email: localStorage.getItem('user_name') ? localStorage.getItem('user_name') : ''
+      email: localStorage.getItem('user_email') ? localStorage.getItem('user_email') : ''
     };
     console.log(this.user);
   }
