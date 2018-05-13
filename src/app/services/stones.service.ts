@@ -14,14 +14,18 @@ interface IStone {
 
 export class StonesService {
 
+  SERVER_URL: string;
+
   stones: [IStone];
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  constructor(private authService: AuthService, private http: HttpClient) {
+    this.SERVER_URL = 'http://localhost:8001';
+  }
 
   getStones() {
     return new Promise(resolve => {
       const self = this;
       if (!this.stones) {
-        this.http.post('http://localhost:3001/stones', {
+        this.http.post(this.SERVER_URL + '/stones', {
           email: this.authService.user.email
         }).subscribe((res: [IStone]) => {
           self.stones = res;
