@@ -23,7 +23,7 @@ export class SpaceComponent implements OnInit {
   constructor(private stonesService: StonesService) { }
 
   async ngOnInit() {
-    this.stones = await this.stonesService.getStones();
+    this.stones = <[IStone]> await this.stonesService.getStones();
     console.log(this.stones);
     const ctx: CanvasRenderingContext2D =
     this.canvasRef.nativeElement.getContext('2d');
