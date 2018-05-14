@@ -30,11 +30,11 @@ export class SpaceComponent implements OnInit {
 
   constructor(private stonesService: StonesService) { }
 
-  writeMessage(message) {
+  writeMessage(message, x, y) {
     // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.font = '18pt Calibri';
     this.ctx.fillStyle = 'black';
-    this.ctx.fillText(message, 10, 25);
+    this.ctx.fillText(message, x, y);
   }
   getMousePos(evt) {
     const rect = this.canvas.getBoundingClientRect();
@@ -45,11 +45,11 @@ export class SpaceComponent implements OnInit {
   }
 
   putStone(stone: IStone) {
-      stone.background = this.ctx.getImageData(
-      stone.x - this.stoneRadius - 5,
-      stone.y - this.stoneRadius - 5,
-      this.stoneRadius * 2 + 10,
-      this.stoneRadius * 2 + 10);
+    stone.background = this.ctx.getImageData(
+    stone.x - this.stoneRadius - 5,
+    stone.y - this.stoneRadius - 5,
+    this.stoneRadius * 2 + 5,
+    this.stoneRadius * 2 + 5);
     this.ctx.beginPath();
     if ( stone === null ) { return; }
     this.ctx.arc(stone.x, stone.y, this.stoneRadius, 0, 2 * Math.PI);
@@ -59,49 +59,33 @@ export class SpaceComponent implements OnInit {
   }
   clearStone(stone: IStone) {
     this.ctx.putImageData(stone.background, stone.x - this.stoneRadius - 5, stone.y - this.stoneRadius - 5);
-    if ( stone === null ) { return; }
   }
 
   async ngOnInit() {
     this.stones = <[IStone]> await this.stonesService.getStones();
     this.canvas = this.canvasRef.nativeElement;
     this.ctx = this.canvas.getContext('2d');
-    console.log(this.stones);
-
-    this.ctx.fillStyle = 'black';
-    this.ctx.font = '20px Georgia';
-    this.ctx.fillText(this.title, 10, 20);
+    this.writeMessage(this.title, 10, 20);
     const x = 10;
     let y = 40;
     this.stones.forEach((stone: IStone) => {
-      y += this.stoneRadius * 2+20;
+      y += this.stoneRadius * 2 + 10;
       stone.x = x;
       stone.y = y;
       stone.drag = false;
       stone = this.putStone(stone);
     });
-    const self = this;
-    console.log(this.stones);
-
-    this.canvas.addEventListener('click', function(evt) {
-      const mousePos = self.getMousePos(evt);
-      const message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-      self.writeMessage(message);
-    }, false);
   }
 
   stoneTake(event) {
-    console.log(this.stone);
-    if (this.stone) {this.stone.drag = false;}
-    console.log(event.type);
+    if (this.stone) {
+      this.stone.drag = false;
+    }
     const self = this;
     this.stones.forEach((stone: IStone) => {
       const mousePos = self.getMousePos(event);
-      //console.log('=>'+stone.x+' '+stone.y+' '+mousePos.x+' '+mousePos.y)
       if (Math.pow(mousePos.x - stone.x, 2) + Math.pow(mousePos.y - stone.y, 2) < Math.pow(self.stoneRadius, 2)) {
-        console.log('YES');
         this.stone = stone;
-        console.log(stone.color);
         this.stone.drag = true;
       }
     });
@@ -113,8 +97,6 @@ export class SpaceComponent implements OnInit {
     this.stone.y = this.getMousePos(event).y;
     this.stone = this.putStone(this.stone);
     this.stone.drag = false;
-    console.log(event.type);
-    //this.stone = null;
   }
   stoneDrag(event){
     if (!this.stone || !this.stone.drag) { return; }
@@ -122,6 +104,5 @@ export class SpaceComponent implements OnInit {
     this.stone.x = this.getMousePos(event).x;
     this.stone.y = this.getMousePos(event).y;
     this.stone = this.putStone(this.stone);
-    console.log(event.type);
   }
 }
