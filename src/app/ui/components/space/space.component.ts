@@ -55,7 +55,6 @@ export class SpaceComponent implements OnInit {
     this.ctx.arc(stone.x, stone.y, this.stoneRadius, 0, 2 * Math.PI);
     this.ctx.fillStyle = stone.color;
     this.ctx.fill();
-    return stone;
   }
   clearStone(stone: IStone) {
     this.ctx.putImageData(stone.background, stone.x - this.stoneRadius - 5, stone.y - this.stoneRadius - 5);
@@ -73,7 +72,7 @@ export class SpaceComponent implements OnInit {
       stone.x = x;
       stone.y = y;
       stone.drag = false;
-      stone = this.putStone(stone);
+      this.putStone(stone);
     });
   }
 
@@ -95,7 +94,7 @@ export class SpaceComponent implements OnInit {
     this.clearStone(this.stone);
     this.stone.x = this.getMousePos(event).x;
     this.stone.y = this.getMousePos(event).y;
-    this.stone = this.putStone(this.stone);
+    this.putStone(this.stone);
     this.stone.drag = false;
   }
   stoneDrag(event){
@@ -103,6 +102,6 @@ export class SpaceComponent implements OnInit {
     this.clearStone(this.stone);
     this.stone.x = this.getMousePos(event).x;
     this.stone.y = this.getMousePos(event).y;
-    this.stone = this.putStone(this.stone);
+    this.putStone(this.stone);
   }
 }
