@@ -1,3 +1,7 @@
 <div>
-        <canvas #canvas width="500" height="500"></canvas>
+        <canvas #canvas 
+        (mousedown)="stoneTake($event)" 
+        (mouseup)="stoneDrop($event)" 
+        (mousemove)="stoneDrag($event)" 
+        width="500" height="500"></canvas>
 </div>
