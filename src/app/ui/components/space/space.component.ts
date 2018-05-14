@@ -20,22 +20,13 @@ interface IStone {
 export class SpaceComponent implements OnInit {
 
   title = 'Stone space';
-  stones: IStone[];
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  stoneRadius = 10;
-  stone: IStone;
+
 
   @ViewChild('canvas') canvasRef: ElementRef;
 
   constructor(private stonesService: StonesService) { }
 
-  writeMessage(message, x, y) {
-    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.font = '18pt Calibri';
-    this.ctx.fillStyle = 'black';
-    this.ctx.fillText(message, x, y);
-  }
+
   getMousePos(evt) {
     const rect = this.canvas.getBoundingClientRect();
     return {
@@ -44,36 +35,15 @@ export class SpaceComponent implements OnInit {
     };
   }
 
-  putStone(stone: IStone) {
-    stone.background = this.ctx.getImageData(
-    stone.x - this.stoneRadius - 5,
-    stone.y - this.stoneRadius - 5,
-    this.stoneRadius * 2 + 5,
-    this.stoneRadius * 2 + 5);
-    this.ctx.beginPath();
-    if ( stone === null ) { return; }
-    this.ctx.arc(stone.x, stone.y, this.stoneRadius, 0, 2 * Math.PI);
-    this.ctx.fillStyle = stone.color;
-    this.ctx.fill();
-  }
   clearStone(stone: IStone) {
     this.ctx.putImageData(stone.background, stone.x - this.stoneRadius - 5, stone.y - this.stoneRadius - 5);
   }
 
   async ngOnInit() {
-    this.stones = <[IStone]> await this.stonesService.getStones();
-    this.canvas = this.canvasRef.nativeElement;
-    this.ctx = this.canvas.getContext('2d');
-    this.writeMessage(this.title, 10, 20);
-    const x = 10;
-    let y = 40;
-    this.stones.forEach((stone: IStone) => {
-      y += this.stoneRadius * 2 + 10;
-      stone.x = x;
-      stone.y = y;
-      stone.drag = false;
-      this.putStone(stone);
-    });
+    await this.stonesService.getStones();
+    this.stonesService.initSpace(this.canvasRef);
+    this.stonesService.writeMessage(this.title, 10, 20);
+    this.stonesService.inventoryShow();
   }
 
   stoneTake(event) {

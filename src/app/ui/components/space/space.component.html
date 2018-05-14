@@ -1,7 +1,7 @@
 <div>
         <canvas #canvas 
-        (mousedown)="stoneTake($event)" 
-        (mouseup)="stoneDrop($event)" 
-        (mousemove)="stoneDrag($event)" 
+        (mousedown)="stonesService.stoneTake($event)" 
+        (mouseup)="stonesService.stoneDrop($event)" 
+        (mousemove)="stonesService.stoneDrag($event)" 
         width="500" height="500"></canvas>
 </div>
