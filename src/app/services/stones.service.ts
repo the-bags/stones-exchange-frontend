@@ -75,8 +75,8 @@ export class StonesService {
     stone.background = this.ctx.getImageData(
     stone.x - this.stoneRadius - 5,
     stone.y - this.stoneRadius - 5,
-    this.stoneRadius * 2 + 5,
-    this.stoneRadius * 2 + 5);
+    this.stoneRadius * 2 + 10,
+    this.stoneRadius * 2 + 10);
     this.ctx.beginPath();
     if ( stone === null ) { return; }
     this.ctx.arc(stone.x, stone.y, this.stoneRadius, 0, 2 * Math.PI);
