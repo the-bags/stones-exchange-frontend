@@ -107,7 +107,7 @@ export class SpaceComponent implements OnInit {
     });
   }
   stoneDrop(event) {
-    if (!this.stone.drag) { return; }
+    if (!this.stone || !this.stone.drag) { return; }
     this.clearStone(this.stone);
     this.stone.x = this.getMousePos(event).x;
     this.stone.y = this.getMousePos(event).y;
@@ -117,7 +117,7 @@ export class SpaceComponent implements OnInit {
     //this.stone = null;
   }
   stoneDrag(event){
-    if (!this.stone.drag) { return; }
+    if (!this.stone || !this.stone.drag) { return; }
     this.clearStone(this.stone);
     this.stone.x = this.getMousePos(event).x;
     this.stone.y = this.getMousePos(event).y;
