@@ -4,6 +4,10 @@ import { StonesService } from '../../../services/stones.service';
 interface IStone {
   name: string;
   color: string;
+  x: number;
+  y: number;
+  background: ImageData;
+  drag: boolean;
 }
 
 
@@ -16,28 +20,58 @@ interface IStone {
 export class SpaceComponent implements OnInit {
 
   title = 'Stone space';
-  stones: IStone[];
+
 
   @ViewChild('canvas') canvasRef: ElementRef;
 
   constructor(private stonesService: StonesService) { }
 
-  async ngOnInit() {
-    this.stones = <[IStone]> await this.stonesService.getStones();
-    console.log(this.stones);
-    const ctx: CanvasRenderingContext2D =
-    this.canvasRef.nativeElement.getContext('2d');
-    ctx.fillStyle = 'black';
-    ctx.font = '20px Georgia';
-    ctx.fillText(this.title, 10, 20);
-    let y = 40;
-    this.stones.forEach((stone: IStone) => {
-      ctx.beginPath();
-      ctx.arc(40, y += 20, 10, 0, 2 * Math.PI);
-      ctx.fillStyle = stone.color;
-      ctx.fill();
-    });
-    ctx.beginPath();
-}
 
+  getMousePos(evt) {
+    const rect = this.canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+
+  clearStone(stone: IStone) {
+    this.ctx.putImageData(stone.background, stone.x - this.stoneRadius - 5, stone.y - this.stoneRadius - 5);
+  }
+
+  async ngOnInit() {
+    await this.stonesService.getStones();
+    this.stonesService.initSpace(this.canvasRef);
+    this.stonesService.writeMessage(this.title, 10, 20);
+    this.stonesService.inventoryShow();
+  }
+
+  stoneTake(event) {
+    if (this.stone) {
+      this.stone.drag = false;
+    }
+    const self = this;
+    this.stones.forEach((stone: IStone) => {
+      const mousePos = self.getMousePos(event);
+      if (Math.pow(mousePos.x - stone.x, 2) + Math.pow(mousePos.y - stone.y, 2) < Math.pow(self.stoneRadius, 2)) {
+        this.stone = stone;
+        this.stone.drag = true;
+      }
+    });
+  }
+  stoneDrop(event) {
+    if (!this.stone || !this.stone.drag) { return; }
+    this.clearStone(this.stone);
+    this.stone.x = this.getMousePos(event).x;
+    this.stone.y = this.getMousePos(event).y;
+    this.putStone(this.stone);
+    this.stone.drag = false;
+  }
+  stoneDrag(event){
+    if (!this.stone || !this.stone.drag) { return; }
+    this.clearStone(this.stone);
+    this.stone.x = this.getMousePos(event).x;
+    this.stone.y = this.getMousePos(event).y;
+    this.putStone(this.stone);
+  }
 }
