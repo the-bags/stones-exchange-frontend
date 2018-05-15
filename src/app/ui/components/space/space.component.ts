@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { StonesService } from '../../../services/stones.service';
+import { SocketService } from '../../../services/socket.service';
 
 interface IStone {
   name: string;
@@ -24,7 +25,25 @@ export class SpaceComponent implements OnInit {
 
   @ViewChild('canvas') canvasRef: ElementRef;
 
-  constructor(public stonesService: StonesService) { }
+  constructor(public stonesService: StonesService, public socket: SocketService) { 
+
+    this.socket.emit('say_for_server', 'Hello Server').subscribe(
+      (data) => {
+          console.log('Success', data);
+      },
+      (error) => {
+          console.log('Error', error);
+      },
+      () => {
+          console.log('complete');
+      }
+  );
+
+    this.socket.on('customEmit').subscribe((data) => {
+      console.log(data);
+    });
+
+  }
 
 
   async ngOnInit() {

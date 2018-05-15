@@ -6,6 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './/app-routing.module';
 import { AppComponent } from './app.component';
 import { UiModule } from './ui/ui.module';
+
+import { SocketService } from './services/socket.service';
+
 // import { ComponentsModule } from './ui/components/components.module';
 
 @NgModule({
@@ -15,7 +18,7 @@ import { UiModule } from './ui/ui.module';
   imports: [
      BrowserModule, AppRoutingModule, UiModule, HttpClientModule
   ],
-  providers: [],
+  providers: [SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
