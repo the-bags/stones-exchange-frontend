@@ -32,9 +32,11 @@ interface IStone {
     ctx: CanvasRenderingContext2D;
     stoneRadius = 10;
     stone: IStone;
-    space: {}[];
+    grid: {};
 
-    constructor(private authService: AuthService, private http: HttpClient) {}
+    constructor(private authService: AuthService, private http: HttpClient) {
+      this.grid = {};
+    }
 
     getStones() {
       return new Promise(resolve => {
@@ -57,6 +59,16 @@ interface IStone {
       this.canvas = canvasRef.nativeElement;
       this.ctx = this.canvas.getContext('2d');
     }
+    putStoneGrid(stone: IStone) {
+      this.grid[stone.x.toString() + ',' + stone.y.toString()] = stone;
+    }
+    getStoneGrid(x: number, y: number) {
+      return this.grid[x.toString() + ',' + y.toString()];
+    }
+    removeStoneGrid(stone: IStone) {
+      delete this.grid[stone.x.toString() + ',' + stone.y.toString()];
+    }
+
     getMousePos(event) {
       const rect = this.canvas.getBoundingClientRect();
       return {
@@ -111,6 +123,7 @@ interface IStone {
         y += 2;
         stone.x = x;
         stone.y = y;
+        this.putStoneGrid(stone);
         stone.drag = false;
         this.putStone(stone);
       });
@@ -119,35 +132,33 @@ interface IStone {
       if (this.stone) {
         this.stone.drag = false;
       }
-      const self = this;
-      this.stones.forEach((stone: IStone) => {
-        const mouse = self.convertCoordSpaceToStone(self.getMousePos(event));
-        if (mouse.x === stone.x
-        &&  mouse.y === stone.y) {
-          this.stone = stone;
-          this.stone.drag = true;
-          this.dragPosition = {
-            x: stone.x * this.stoneRadius * 2 + 10,
-            y: stone.y * this.stoneRadius * 2 + 10,
-          };
-        }
-      });
+      const mous = this.convertCoordSpaceToStone(this.getMousePos(event));
+      if (this.getStoneGrid(mous.x, mous.y)) {
+        this.stone = this.getStoneGrid(mous.x, mous.y);
+        this.stone.drag = true;
+        this.dragPosition = this.convertCoordStoneToSpace(this.stone);
+      }
     }
     stoneDrop(event) {
       if (!this.stone || !this.stone.drag) { return; }
-      this.clearStone(this.stone, this.stone);
+      this.clearStone(this.stone, this.dragPosition);
       const mouse = this.convertCoordSpaceToStone(this.getMousePos(event));
-      this.stone.x = mouse.x;
-      this.stone.y = mouse.y;
-      this.putStone(this.stone);
+      if (this.getStoneGrid(mouse.x, mouse.y)) {
+        this.putStone(this.stone);
+        this.putStoneGrid(this.stone);
+      } else {
+        this.removeStoneGrid(this.stone);
+        this.stone.x = mouse.x;
+        this.stone.y = mouse.y;
+        this.putStone(this.stone);
+        this.putStoneGrid(this.stone);
+      }
       this.stone.drag = false;
     }
     stoneDrag(event) {
       if (!this.stone || !this.stone.drag) { return; }
       this.clearStone(this.stone, this.dragPosition);
       this.dragPosition = this.getMousePos(event);
-      this.stone.x = this.dragPosition.x; // <--- here caalculate
-      this.stone.y = this.dragPosition.y;
       this.drawStone(this.stone, this.dragPosition);
     }
 
