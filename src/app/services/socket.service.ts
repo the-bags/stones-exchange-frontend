@@ -5,21 +5,19 @@ import { Observer } from 'rxjs';
 
 import * as io from 'socket.io-client';
 
-const SERVER_URL = 'http://localhost:8002';
-
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
 export class SocketService {
     private socket: any;
-    private host: string =  SERVER_URL;
 
     constructor() {
-      this.socket = io(this.host);
+      this.socket = io(environment.socketUrl);
       this.socket.on('connect', () => this.connected());
       this.socket.on('disconnect', () => this.disconnected());
       this.socket.on('error', (error: string) => {
-          console.log(`ERROR: "${error}" (${this.host})`);
+          console.log(`ERROR: "${error}" (${environment.socketUrl})`);
       });
     }
 

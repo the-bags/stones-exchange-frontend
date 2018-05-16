@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
 
+import { environment } from '../../environments/environment';
+
 interface IStone {
   name: string;
   color: string;
@@ -27,15 +29,13 @@ export class StonesService {
   stoneRadius = 10;
   stone: IStone;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
-    this.SERVER_URL = 'http://localhost:8001';
-  }
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   getStones() {
     return new Promise(resolve => {
       const self = this;
       if (!this.stones) {
-        this.http.post(this.SERVER_URL + '/stones', {
+        this.http.post(environment.apiUrl + '/stones', {
           email: this.authService.user.email
         }).subscribe((res: [IStone]) => {
           self.stones = res;

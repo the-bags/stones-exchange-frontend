@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import { environment } from '../../environments/environment';
+
 interface IUser {
   authenticated: boolean;
   name: string;
@@ -18,12 +20,10 @@ interface IResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  SERVER_URL: string;
 
   user: IUser;
 
   constructor(private router: Router, private http: HttpClient) {
-    this.SERVER_URL = 'http://127.0.0.1:8001';
     this.user = {
       authenticated: localStorage.getItem('authenticated') === 'true' ? true : false,
       name: localStorage.getItem('user_name') ? localStorage.getItem('user_name') : '',
@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   login(credentials) {
-      this.http.post(this.SERVER_URL + '/login', credentials).subscribe(
+      this.http.post(environment.apiUrl + '/login', credentials).subscribe(
         (res: IResponse) => {
           console.log(res);
           this.user.authenticated = true;
@@ -64,7 +64,7 @@ export class AuthService {
     }
 
     register(credentials) {
-      this.http.post(this.SERVER_URL + '/register', credentials).subscribe(
+      this.http.post(environment.apiUrl + '/register', credentials).subscribe(
         (res: IResponse) => {
           console.log(res);
           this.user.authenticated = true;
