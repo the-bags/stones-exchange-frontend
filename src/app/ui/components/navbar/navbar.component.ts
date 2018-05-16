@@ -7,7 +7,10 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  constructor(private authService: AuthService) { }
+  isCollapsed: boolean;
+  constructor(public authService: AuthService) {
+    this.isCollapsed = false;
+  }
 
   ngOnInit() {
   }
