@@ -89,7 +89,7 @@ interface IStone {
       };
     }
     clearStone(stone: IStone, position: IPixelPosition) {
-      this.ctx.putImageData(stone.background, position.x - this.stoneRadius - 5, position.y - this.stoneRadius - 5);
+      this.ctx.putImageData(stone.background, position.x - this.stoneRadius, position.y - this.stoneRadius);
     }
 
     writeMessage(message, x, y) {
@@ -105,10 +105,10 @@ interface IStone {
 
     drawStone(stone: IStone, position: IPixelPosition) {
       stone.background = this.ctx.getImageData(
-      position.x - this.stoneRadius - 5,
-      position.y - this.stoneRadius - 5,
-      this.stoneRadius * 2 + 10,
-      this.stoneRadius * 2 + 10);
+      position.x - this.stoneRadius,
+      position.y - this.stoneRadius,
+      this.stoneRadius * 2,
+      this.stoneRadius * 2);
       this.ctx.beginPath();
       if ( stone === null ) { return; }
       this.ctx.arc(position.x, position.y, this.stoneRadius, 0, 2 * Math.PI);
