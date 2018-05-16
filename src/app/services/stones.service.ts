@@ -14,6 +14,11 @@ interface IStone {
     drag: boolean;
   }
 
+  interface IPixelPosition {
+    x: number;
+    y: number;
+  }
+
 
   @Injectable({
     providedIn: 'root'
@@ -24,6 +29,7 @@ interface IStone {
     SERVER_URL: string;
 
     stones: IStone[];
+    dragPosition: IPixelPosition;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     stoneRadius = 10;
@@ -52,16 +58,16 @@ interface IStone {
       this.canvas = canvasRef.nativeElement;
       this.ctx = this.canvas.getContext('2d');
     }
-    getMousePos(evt) {
+    getMousePos(event) {
       const rect = this.canvas.getBoundingClientRect();
       return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
       };
     }
 
-    clearStone(stone: IStone) {
-      this.ctx.putImageData(stone.background, stone.x - this.stoneRadius - 5, stone.y - this.stoneRadius - 5);
+    clearStone(stone: IStone, position: IPixelPosition) {
+      this.ctx.putImageData(stone.background, position.x - this.stoneRadius - 5, position.y - this.stoneRadius - 5);
     }
 
     writeMessage(message, x, y) {
@@ -71,15 +77,15 @@ interface IStone {
       this.ctx.fillText(message, x, y);
     }
 
-    putStone(stone: IStone) {
+    putStone(stone: IStone, position: IPixelPosition) {
       stone.background = this.ctx.getImageData(
-      stone.x - this.stoneRadius - 5,
-      stone.y - this.stoneRadius - 5,
+      position.x - this.stoneRadius - 5,
+      position.y - this.stoneRadius - 5,
       this.stoneRadius * 2 + 10,
       this.stoneRadius * 2 + 10);
       this.ctx.beginPath();
       if ( stone === null ) { return; }
-      this.ctx.arc(stone.x, stone.y, this.stoneRadius, 0, 2 * Math.PI);
+      this.ctx.arc(position.x, position.y, this.stoneRadius, 0, 2 * Math.PI);
       this.ctx.fillStyle = stone.color;
       this.ctx.fill();
     }
@@ -92,7 +98,7 @@ interface IStone {
         stone.x = x;
         stone.y = y;
         stone.drag = false;
-        this.putStone(stone);
+        this.putStone(stone, stone);
       });
     }
     stoneTake(event) {
@@ -110,18 +116,20 @@ interface IStone {
     }
     stoneDrop(event) {
       if (!this.stone || !this.stone.drag) { return; }
-      this.clearStone(this.stone);
-      this.stone.x = this.getMousePos(event).x;
-      this.stone.y = this.getMousePos(event).y;
-      this.putStone(this.stone);
+      this.clearStone(this.stone, this.stone);
+      this.dragPosition = this.getMousePos(event);
+      this.stone.x = this.dragPosition.x; // <--- here caalculate
+      this.stone.y = this.dragPosition.y;
+      this.putStone(this.stone, this.dragPosition);
       this.stone.drag = false;
     }
     stoneDrag(event) {
       if (!this.stone || !this.stone.drag) { return; }
-      this.clearStone(this.stone);
-      this.stone.x = this.getMousePos(event).x;
-      this.stone.y = this.getMousePos(event).y;
-      this.putStone(this.stone);
+      this.clearStone(this.stone, this.stone);
+      this.dragPosition = this.getMousePos(event);
+      this.stone.x = this.dragPosition.x; // <--- here caalculate
+      this.stone.y = this.dragPosition.y;
+      this.putStone(this.stone, this.dragPosition);
     }
 
   }
