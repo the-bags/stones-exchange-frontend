@@ -1,7 +1,8 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
+import { SocketService } from './socket.service';
 
 import { environment } from '../../environments/environment';
 
@@ -24,7 +25,7 @@ interface IStone {
     providedIn: 'root'
   })
 
-  export class StonesService {
+  export class StonesService implements OnInit {
 
     stonesInventory: IStone[];
     dragPosition: IPixelPosition;
@@ -36,10 +37,32 @@ interface IStone {
     // Map for monitoring the position of stones, giving quick access
     map: Map<string, IStone>;
 
-    constructor(private authService: AuthService, private http: HttpClient) {
+    constructor(private authService: AuthService, private http: HttpClient, public socket: SocketService) {
       this.map = new Map();
+      this.socket.on('broadcast').subscribe(      (data) => {
+        console.log('Success', data);
+    },
+    (error) => {
+        console.log('Error', error);
+    },
+    () => {
+        console.log('complete');
+    });
+      this.socket.on('drop_stone').subscribe((stone) => {
+       this.putStone(stone);
+       this.putStoneGrid(stone);
+      });
+      this.socket.on('take_stone').subscribe((stone) => {
+        if (stone.x > 1) {
+          this.removeStoneGrid(stone);
+          this.clearStone(stone, this.convertCoordStoneToSpace(stone));
+        }
+       });
     }
 
+    ngOnInit(): void {
+
+    }
     getStones() {
       return new Promise(resolve => {
         const self = this;
@@ -91,9 +114,18 @@ interface IStone {
       };
     }
     clearStone(stone: IStone, position: IPixelPosition) {
-      this.ctx.putImageData(stone.background, position.x - this.stoneRadius, position.y - this.stoneRadius);
+     /* if (stone.background) {
+        this.ctx.putImageData(stone.background, position.x - this.stoneRadius, position.y - this.stoneRadius);
+      } else {*/
+        const x = position.x - this.stoneRadius;
+        const y = position.y - this.stoneRadius;
+        this.ctx.clearRect(
+          x - 1,
+          y - 1,
+          this.stoneRadius * 2 + 1,
+          this.stoneRadius * 2 + 1);
+      //}
     }
-
     writeMessage(message, x, y) {
       // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.font = '18pt Calibri';
@@ -109,8 +141,8 @@ interface IStone {
       stone.background = this.ctx.getImageData(
       position.x - this.stoneRadius,
       position.y - this.stoneRadius,
-      this.stoneRadius * 2,
-      this.stoneRadius * 2);
+      this.stoneRadius * 2 + 1,
+      this.stoneRadius * 2 + 1);
       this.ctx.beginPath();
       if ( stone === null ) { return; }
       this.ctx.arc(position.x, position.y, this.stoneRadius, 0, 2 * Math.PI);
@@ -138,6 +170,17 @@ interface IStone {
       if (this.getStoneGrid(mous.x, mous.y)) {
         this.stone = this.getStoneGrid(mous.x, mous.y);
         this.stone.drag = true;
+        this.socket.emit('take_stone', this.stone).subscribe(
+          data => {
+            console.log('Success', data);
+          },
+          error => {
+            console.log('Error', error);
+          },
+          () => {
+            console.log('complete');
+          }
+        );
         this.dragPosition = this.convertCoordStoneToSpace(this.stone);
       }
     }
@@ -152,8 +195,19 @@ interface IStone {
         this.removeStoneGrid(this.stone);
         this.stone.x = mouse.x;
         this.stone.y = mouse.y;
-        this.putStone(this.stone);
-        this.putStoneGrid(this.stone);
+        this.socket.emit('drop_stone', this.stone).subscribe(
+          data => {
+            console.log('Success', data);
+          },
+          error => {
+            console.log('Error', error);
+          },
+          () => {
+            console.log('complete');
+          }
+        );
+       // this.putStone(this.stone);
+       // this.putStoneGrid(this.stone);
       }
       this.stone.drag = false;
     }
