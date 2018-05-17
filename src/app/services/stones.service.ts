@@ -26,30 +26,32 @@ interface IStone {
 
   export class StonesService {
 
-    stones: IStone[];
+    stonesInventory: IStone[];
     dragPosition: IPixelPosition;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     stoneRadius = 10;
+    // Current stone when is dragging
     stone: IStone;
-    grid: {};
+    // Map for monitoring the position of stones, giving quick access
+    map: Map<string, IStone>;
 
     constructor(private authService: AuthService, private http: HttpClient) {
-      this.grid = {};
+      this.map = new Map();
     }
 
     getStones() {
       return new Promise(resolve => {
         const self = this;
-        if (!this.stones) {
+        if (!this.stonesInventory) {
           this.http.post(environment.apiUrl + '/stones', {
             email: this.authService.user.email
           }).subscribe((res: [IStone]) => {
-            self.stones = res;
-            resolve(self.stones);
+            self.stonesInventory = res;
+            resolve(self.stonesInventory);
           });
         } else {
-           resolve(self.stones);
+           resolve(self.stonesInventory);
         }
       });
 
@@ -60,13 +62,13 @@ interface IStone {
       this.ctx = this.canvas.getContext('2d');
     }
     putStoneGrid(stone: IStone) {
-      this.grid[stone.x.toString() + ',' + stone.y.toString()] = stone;
+      this.map.set(stone.x.toString() + ',' + stone.y.toString(), stone);
     }
     getStoneGrid(x: number, y: number) {
-      return this.grid[x.toString() + ',' + y.toString()];
+      return this.map.get(x.toString() + ',' + y.toString());
     }
     removeStoneGrid(stone: IStone) {
-      delete this.grid[stone.x.toString() + ',' + stone.y.toString()];
+      this.map.delete(stone.x.toString() + ',' + stone.y.toString());
     }
 
     getMousePos(event) {
@@ -119,7 +121,7 @@ interface IStone {
     inventoryShow() {
       const x = 1;
       let y = 1;
-      this.stones.forEach((stone: IStone) => {
+      this.stonesInventory.forEach((stone: IStone) => {
         y += 2;
         stone.x = x;
         stone.y = y;
