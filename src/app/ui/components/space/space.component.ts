@@ -25,7 +25,7 @@ export class SpaceComponent implements OnInit {
 
   @ViewChild('canvas') canvasRef: ElementRef;
 
-  constructor(public stonesService: StonesService, public socket: SocketService) { 
+  constructor(public stonesService: StonesService, public socket: SocketService) {
 
     this.socket.emit('say_for_server', 'Hello Server').subscribe(
       (data) => {
