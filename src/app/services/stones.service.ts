@@ -13,6 +13,7 @@ interface IStone {
     y: number;
     background: ImageData;
     drag: boolean;
+    email: string;
   }
 
   interface IPixelPosition {
@@ -49,13 +50,17 @@ interface IStone {
         console.log('complete');
     });
       this.socket.on('drop_stone').subscribe((stone) => {
+        if (stone.email !== this.authService.user.email) {
        this.putStone(stone);
        this.putStoneGrid(stone);
+        }
       });
       this.socket.on('take_stone').subscribe((stone) => {
         if (stone.x > 1) {
+          if (stone.email !== this.authService.user.email) {
           this.removeStoneGrid(stone);
           this.clearStone(stone, this.convertCoordStoneToSpace(stone));
+          }
         }
        });
     }
@@ -114,9 +119,9 @@ interface IStone {
       };
     }
     clearStone(stone: IStone, position: IPixelPosition) {
-     /* if (stone.background) {
+      if (stone.background) {
         this.ctx.putImageData(stone.background, position.x - this.stoneRadius, position.y - this.stoneRadius);
-      } else {*/
+      } else {
         const x = position.x - this.stoneRadius;
         const y = position.y - this.stoneRadius;
         this.ctx.clearRect(
@@ -124,7 +129,7 @@ interface IStone {
           y - 1,
           this.stoneRadius * 2 + 1,
           this.stoneRadius * 2 + 1);
-      //}
+      }
     }
     writeMessage(message, x, y) {
       // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -157,6 +162,7 @@ interface IStone {
         y += 2;
         stone.x = x;
         stone.y = y;
+        stone.email = this.authService.user.email;
         this.putStoneGrid(stone);
         stone.drag = false;
         this.putStone(stone);
@@ -167,7 +173,8 @@ interface IStone {
         this.stone.drag = false;
       }
       const mous = this.convertCoordSpaceToStone(this.getMousePos(event));
-      if (this.getStoneGrid(mous.x, mous.y)) {
+      if (this.getStoneGrid(mous.x, mous.y)
+      && this.getStoneGrid(mous.x, mous.y).email === this.authService.user.email) {
         this.stone = this.getStoneGrid(mous.x, mous.y);
         this.stone.drag = true;
         this.socket.emit('take_stone', this.stone).subscribe(
@@ -187,6 +194,7 @@ interface IStone {
     stoneDrop(event) {
       if (!this.stone || !this.stone.drag) { return; }
       this.clearStone(this.stone, this.dragPosition);
+      this.stone.drag = false;
       const mouse = this.convertCoordSpaceToStone(this.getMousePos(event));
       if (this.getStoneGrid(mouse.x, mouse.y)) {
         this.putStone(this.stone);
@@ -195,22 +203,21 @@ interface IStone {
         this.removeStoneGrid(this.stone);
         this.stone.x = mouse.x;
         this.stone.y = mouse.y;
-        this.socket.emit('drop_stone', this.stone).subscribe(
-          data => {
-            console.log('Success', data);
-          },
-          error => {
-            console.log('Error', error);
-          },
-          () => {
-            console.log('complete');
-          }
-        );
-       // this.putStone(this.stone);
-       // this.putStoneGrid(this.stone);
+        this.putStone(this.stone);
+        this.putStoneGrid(this.stone);
       }
-      this.stone.drag = false;
-    }
+      this.socket.emit('drop_stone', this.stone).subscribe(
+        data => {
+          console.log('Success', data);
+        },
+        error => {
+          console.log('Error', error);
+        },
+        () => {
+          console.log('complete');
+        }
+      );
+     }
     stoneDrag(event) {
       if (!this.stone || !this.stone.drag) { return; }
       this.clearStone(this.stone, this.dragPosition);
