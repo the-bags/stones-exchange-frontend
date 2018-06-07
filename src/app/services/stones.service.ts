@@ -176,6 +176,8 @@ interface IStone {
       if (this.getStoneGrid(mous.x, mous.y)
       && this.getStoneGrid(mous.x, mous.y).email === this.authService.user.email) {
         this.stone = this.getStoneGrid(mous.x, mous.y);
+        this.ctx.clearRect(190, 0, 300, 40);
+        this.writeMessage('you take '+this.stone.name, 200, 20);
         this.stone.drag = true;
         this.socket.emit('take_stone', this.stone).subscribe(
           data => {
