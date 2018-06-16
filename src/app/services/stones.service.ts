@@ -95,15 +95,16 @@ interface IStone {
       this.canvas = canvasRef.nativeElement;
       this.ctx = this.canvas.getContext('2d');
 
-      // this.socket.on('space').subscribe((stones : IStone) => {
-      //   console.log('==>',stones);
-      //   for (let key in stones) {
-      //     console.log(stones[key]);
-      //     this.putStone(stones[key]);
-      //     this.putStoneGrid(stones[key]);
-      //   }
-      // });
-      // this.socket.emit('get_space', null).subscribe();
+      this.socket.on('space').subscribe((stones : IStone) => {
+        console.log('==>',stones);
+        for (let key in stones) {
+          this.clearStone(stones[key], this.convertCoordStoneToSpace(stones[key]));
+          console.log(stones[key]);
+          this.putStone(stones[key]);
+          this.putStoneGrid(stones[key]);
+        }
+      });
+      this.socket.emit('get_space', null).subscribe();
     }
     putStoneGrid(stone: IStone) {
       this.map.set(stone.x.toString() + ',' + stone.y.toString(), stone);
@@ -165,7 +166,6 @@ interface IStone {
         position.y - this.stoneRadius,
         this.stoneRadius * 2 + 1,
         this.stoneRadius * 2 + 1));
-      console.log(this.background);
       this.ctx.beginPath();
       if ( stone === null ) { return; }
       this.ctx.arc(position.x, position.y, this.stoneRadius, 0, 2 * Math.PI);
