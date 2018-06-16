@@ -7,6 +7,8 @@ import { SocketService } from './socket.service';
 import { environment } from '../../environments/environment';
 
 interface IStone {
+    id: string;
+    _id: string;
     name: string;
     color: string;
     x: number;
@@ -37,10 +39,12 @@ interface IStone {
     stone: IStone;
     // Map for monitoring the position of stones, giving quick access
     map: Map<string, IStone>;
+    background: Map<string, ImageData>;
 
     constructor(private authService: AuthService, private http: HttpClient, public socket: SocketService) {
       this.map = new Map();
-      this.socket.on('broadcast').subscribe(      (data) => {
+      this.background = new Map();
+      this.socket.on('broadcast').subscribe((data) => {
         console.log('Success', data);
     },
     (error) => {
@@ -50,17 +54,19 @@ interface IStone {
         console.log('complete');
     });
       this.socket.on('drop_stone').subscribe((stone) => {
-        if (stone.email !== this.authService.user.email) {
+        /*if (stone.email !== this.authService.user.email) {*/
+       this.clearStone(stone, this.convertCoordStoneToSpace(stone));
        this.putStone(stone);
        this.putStoneGrid(stone);
-        }
+       console.log('Drop', stone, this.convertCoordStoneToSpace(stone));
+      /*}*/
       });
       this.socket.on('take_stone').subscribe((stone) => {
         if (stone.x > 1) {
-          if (stone.email !== this.authService.user.email) {
+          /*if (stone.email !== this.authService.user.email) {*/
           this.removeStoneGrid(stone);
           this.clearStone(stone, this.convertCoordStoneToSpace(stone));
-          }
+          /* }*/
         }
        });
     }
@@ -88,6 +94,16 @@ interface IStone {
     initSpace(canvasRef: ElementRef) {
       this.canvas = canvasRef.nativeElement;
       this.ctx = this.canvas.getContext('2d');
+
+      // this.socket.on('space').subscribe((stones : IStone) => {
+      //   console.log('==>',stones);
+      //   for (let key in stones) {
+      //     console.log(stones[key]);
+      //     this.putStone(stones[key]);
+      //     this.putStoneGrid(stones[key]);
+      //   }
+      // });
+      // this.socket.emit('get_space', null).subscribe();
     }
     putStoneGrid(stone: IStone) {
       this.map.set(stone.x.toString() + ',' + stone.y.toString(), stone);
@@ -119,8 +135,9 @@ interface IStone {
       };
     }
     clearStone(stone: IStone, position: IPixelPosition) {
-      if (stone.background) {
-        this.ctx.putImageData(stone.background, position.x - this.stoneRadius, position.y - this.stoneRadius);
+      let background = this.background.get(stone.id);
+      if (background) {
+        this.ctx.putImageData(background, position.x - this.stoneRadius, position.y - this.stoneRadius);
       } else {
         const x = position.x - this.stoneRadius;
         const y = position.y - this.stoneRadius;
@@ -143,11 +160,12 @@ interface IStone {
     }
 
     drawStone(stone: IStone, position: IPixelPosition) {
-      stone.background = this.ctx.getImageData(
-      position.x - this.stoneRadius,
-      position.y - this.stoneRadius,
-      this.stoneRadius * 2 + 1,
-      this.stoneRadius * 2 + 1);
+      this.background.set(stone.id, this.ctx.getImageData(
+        position.x - this.stoneRadius,
+        position.y - this.stoneRadius,
+        this.stoneRadius * 2 + 1,
+        this.stoneRadius * 2 + 1));
+      console.log(this.background);
       this.ctx.beginPath();
       if ( stone === null ) { return; }
       this.ctx.arc(position.x, position.y, this.stoneRadius, 0, 2 * Math.PI);
@@ -160,6 +178,7 @@ interface IStone {
       let y = 1;
       this.stonesInventory.forEach((stone: IStone) => {
         y += 2;
+        stone.id = stone._id + y;
         stone.x = x;
         stone.y = y;
         stone.email = this.authService.user.email;
@@ -174,7 +193,8 @@ interface IStone {
       }
       const mous = this.convertCoordSpaceToStone(this.getMousePos(event));
       if (this.getStoneGrid(mous.x, mous.y)
-      && this.getStoneGrid(mous.x, mous.y).email === this.authService.user.email) {
+      // The condition for moving your stones
+     /* && this.getStoneGrid(mous.x, mous.y).email === this.authService.user.email*/) {
         this.stone = this.getStoneGrid(mous.x, mous.y);
         this.ctx.clearRect(190, 0, 300, 40);
         this.writeMessage('you take '+this.stone.name, 200, 20);
