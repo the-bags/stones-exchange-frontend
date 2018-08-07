@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../core/auth.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -21,8 +21,8 @@ export class RegisterpageComponent implements OnInit {
   }
 
   isConfirm(credentials: NgForm) {
-    return credentials.value.password === credentials.value.confirm 
-           && credentials.value.password !== '';
+    return credentials.value.password === credentials.value.confirm
+      && credentials.value.password !== '';
   }
 
 }

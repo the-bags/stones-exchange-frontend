@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { StonesService } from '../../../services/stones.service';
-import { SocketService } from '../../../services/socket.service';
+import { SocketService } from '../../../core/socket.service';
 
 interface IStone {
   name: string;
@@ -29,15 +29,15 @@ export class SpaceComponent implements OnInit {
 
     this.socket.emit('say_for_server', 'Hello Server').subscribe(
       (data) => {
-          console.log('Success', data);
+        console.log('Success', data);
       },
       (error) => {
-          console.log('Error', error);
+        console.log('Error', error);
       },
       () => {
-          console.log('complete');
+        console.log('complete');
       }
-  );
+    );
 
     this.socket.on('customEmit').subscribe((data) => {
       console.log(data);
