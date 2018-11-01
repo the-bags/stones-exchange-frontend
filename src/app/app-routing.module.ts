@@ -1,25 +1,46 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { QuoteComponent } from './ui/components/quote/quote.component';
-import { LoginpageComponent } from './ui/components/loginpage/loginpage.component';
-import { NavbarComponent } from './ui/components/navbar/navbar.component';
-import { SpaceComponent } from './ui/components/space/space.component';
-import { RegisterpageComponent } from './ui/components/registerpage/registerpage.component';
+import { LoginComponent } from './login/login.component';
+import { WorkspaceComponent } from './workspace/workspace.component';
+import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './workspace/profile/profile.component';
+import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 
-import { ComponentsModule } from './ui/components/components.module';
 const routes: Routes = [
-  { path: '', component: QuoteComponent },
-  { path: 'qoute', component: QuoteComponent },
-  { path: 'loginpage', component: LoginpageComponent},
-  { path: 'navbar', component: NavbarComponent},
-  { path: 'space', component: SpaceComponent},
-  { path: 'registerpage', component: RegisterpageComponent}
+  {
+    path: '',
+    redirectTo: 'workspace',
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
+  },
+  {
+    path: 'workspace',
+    component: WorkspaceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'workspace',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
-  exports: [ RouterModule ],
-  imports: [ RouterModule.forRoot(routes) ]
+  exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)]
 })
 
 export class AppRoutingModule { }

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { StonesService } from '../../../services/stones.service';
-import { SocketService } from '../../../core/socket.service';
+
+import { StonesService } from './../services/stones.service';
+import { SocketService } from './../services/socket.service';
 
 interface IStone {
   name: string;
@@ -13,12 +14,12 @@ interface IStone {
 
 
 @Component({
-  selector: 'app-space',
-  templateUrl: './space.component.html',
-  styleUrls: ['./space.component.css']
+  selector: 'app-workspace',
+  templateUrl: './workspace.component.html',
+  styleUrls: ['./workspace.component.css']
 })
 
-export class SpaceComponent implements OnInit {
+export class WorkspaceComponent implements OnInit {
 
   title = 'Stone space';
 

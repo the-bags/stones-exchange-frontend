@@ -1,0 +1,41 @@
+<h4 class="m-3">Welcome stranger!</h4>
+<div id="quote">
+  <div class="card">
+    <div class="card-header">
+      As one wise men said ...
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p>There is a time to scatter stones and time to gather them together</p>
+        <footer class="blockquote-footer">Ecclesiastes <cite title="Source Title">3:5</cite></footer>
+      </blockquote>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4 offset-4">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-center">Login</h2>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+              <div class="form-group">
+                <label for="userEmail">Email address</label>
+                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email"
+                  name="email" ngModel required>
+              </div>
+              <div class="form-group">
+                <label for="userPassword">Password</label>
+                <input type="password" class="form-control" id="userPassword" placeholder="Password" name="password"
+                  ngModel required>
+              </div>
+              <div class="text-right">
+                <button class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+            <p>No account? <a routerLink="/register">Register</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

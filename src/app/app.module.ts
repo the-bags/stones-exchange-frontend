@@ -1,24 +1,39 @@
+import { AuthGuardService } from './services/auth-guard.service';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing.module';
+import { NgbModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AppComponent } from './app.component';
-import { UiModule } from './ui/ui.module';
-
-import { SocketService } from './core/socket.service';
+import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor } from './core/auth.interceptor';
-import { UserService } from './core/user.service';
-import { AuthService } from './core/auth.service';
-
-// import { ComponentsModule } from './ui/components/components.module';
+import { SocketService } from './services/socket.service';
+import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './login/login.component';
+import { WorkspaceComponent } from './workspace/workspace.component';
+import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './workspace/profile/profile.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    WorkspaceComponent,
+    RegisterComponent,
+    ProfileComponent,
+    MainLayoutComponent
   ],
   imports: [
-    BrowserModule, AppRoutingModule, UiModule, HttpClientModule
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    NgbModule.forRoot(),
+    NgbDropdownModule,
+    AppRoutingModule,
   ],
   providers: [
     {
@@ -28,7 +43,8 @@ import { AuthService } from './core/auth.service';
     },
     SocketService,
     UserService,
-    AuthService
+    AuthService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

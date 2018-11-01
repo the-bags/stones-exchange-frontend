@@ -1,10 +1,11 @@
 import { Injectable, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { AuthService } from '../core/auth.service';
-import { SocketService } from '../core/socket.service';
+import { AuthService } from './auth.service';
+import { SocketService } from './socket.service';
 
 import { environment } from '../../environments/environment';
+import { UserService } from './user.service';
 
 interface IStone {
   id: string;
@@ -41,7 +42,12 @@ export class StonesService implements OnInit {
   map: Map<string, IStone>;
   background: Map<string, ImageData>;
 
-  constructor(private authService: AuthService, private http: HttpClient, public socket: SocketService) {
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private http: HttpClient,
+    public socket: SocketService
+  ) {
     this.map = new Map();
     this.background = new Map();
     this.socket.on('broadcast').subscribe((data) => {
@@ -79,7 +85,7 @@ export class StonesService implements OnInit {
       const self = this;
       if (!this.stonesInventory) {
         this.http.post(environment.apiUrl + '/stones', {
-          email: this.authService.user.email
+          email: 'admin@test.com'
         }).subscribe((res: [IStone]) => {
           self.stonesInventory = res;
           resolve(self.stonesInventory);
@@ -97,11 +103,13 @@ export class StonesService implements OnInit {
 
     this.socket.on('space').subscribe((stones: IStone) => {
       console.log('==>', stones);
-      for (let key in stones) {
-        this.clearStone(stones[key], this.convertCoordStoneToSpace(stones[key]));
-        console.log(stones[key]);
-        this.putStone(stones[key]);
-        this.putStoneGrid(stones[key]);
+      for (const key in stones) {
+        if (key) {
+          this.clearStone(stones[key], this.convertCoordStoneToSpace(stones[key]));
+          console.log(stones[key]);
+          this.putStone(stones[key]);
+          this.putStoneGrid(stones[key]);
+        }
       }
     });
     this.socket.emit('get_space', null).subscribe();
@@ -136,7 +144,7 @@ export class StonesService implements OnInit {
     };
   }
   clearStone(stone: IStone, position: IPixelPosition) {
-    let background = this.background.get(stone.id);
+    const background = this.background.get(stone.id);
     if (background) {
       this.ctx.putImageData(background, position.x - this.stoneRadius, position.y - this.stoneRadius);
     } else {
@@ -181,7 +189,7 @@ export class StonesService implements OnInit {
       stone.id = stone._id + y;
       stone.x = x;
       stone.y = y;
-      stone.email = this.authService.user.email;
+      stone.email = this.userService.getCurrentUser().email;
       this.putStoneGrid(stone);
       stone.drag = false;
       this.putStone(stone);

@@ -6,11 +6,6 @@ export class UserService {
     constructor(
     ) { }
 
-    isAuthorized() {
-
-        return !!this.getCurrentUser();
-    }
-
     getCurrentUser() {
         const userData = localStorage.getItem('user');
 

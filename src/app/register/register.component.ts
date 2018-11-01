@@ -1,13 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AuthService } from '../../../core/auth.service';
 import { NgForm } from '@angular/forms';
 
+import { AuthService } from '../services/auth.service';
+
 @Component({
-  selector: 'app-registerpage',
-  templateUrl: './registerpage.component.html',
-  styleUrls: ['./registerpage.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class RegisterpageComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   @Input() test: string;
 
