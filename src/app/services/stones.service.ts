@@ -6,24 +6,7 @@ import { SocketService } from './socket.service';
 
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
-
-interface IStone {
-  id: string;
-  _id: string;
-  name: string;
-  color: string;
-  x: number;
-  y: number;
-  background: ImageData;
-  drag: boolean;
-  email: string;
-}
-
-interface IPixelPosition {
-  x: number;
-  y: number;
-}
-
+import { IStone, IPixelPosition } from './../core/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +26,6 @@ export class StonesService implements OnInit {
   background: Map<string, ImageData>;
 
   constructor(
-    private authService: AuthService,
     private userService: UserService,
     private http: HttpClient,
     public socket: SocketService
@@ -60,19 +42,15 @@ export class StonesService implements OnInit {
         console.log('complete');
       });
     this.socket.on('drop_stone').subscribe((stone) => {
-      /*if (stone.email !== this.authService.user.email) {*/
       this.clearStone(stone, this.convertCoordStoneToSpace(stone));
       this.putStone(stone);
       this.putStoneGrid(stone);
       console.log('Drop', stone, this.convertCoordStoneToSpace(stone));
-      /*}*/
     });
     this.socket.on('take_stone').subscribe((stone) => {
       if (stone.x > 1) {
-        /*if (stone.email !== this.authService.user.email) {*/
         this.removeStoneGrid(stone);
         this.clearStone(stone, this.convertCoordStoneToSpace(stone));
-        /* }*/
       }
     });
   }
@@ -81,20 +59,7 @@ export class StonesService implements OnInit {
 
   }
   getStones() {
-    return new Promise(resolve => {
-      const self = this;
-      if (!this.stonesInventory) {
-        this.http.post(environment.apiUrl + '/stones', {
-          email: 'admin@test.com'
-        }).subscribe((res: [IStone]) => {
-          self.stonesInventory = res;
-          resolve(self.stonesInventory);
-        });
-      } else {
-        resolve(self.stonesInventory);
-      }
-    });
-
+    return this.http.get(environment.apiUrl + '/stones');
   }
 
   initSpace(canvasRef: ElementRef) {
@@ -102,11 +67,9 @@ export class StonesService implements OnInit {
     this.ctx = this.canvas.getContext('2d');
 
     this.socket.on('space').subscribe((stones: IStone) => {
-      console.log('==>', stones);
       for (const key in stones) {
         if (key) {
           this.clearStone(stones[key], this.convertCoordStoneToSpace(stones[key]));
-          console.log(stones[key]);
           this.putStone(stones[key]);
           this.putStoneGrid(stones[key]);
         }

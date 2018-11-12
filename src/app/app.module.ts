@@ -17,6 +17,7 @@ import { WorkspaceComponent } from './workspace/workspace.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './workspace/profile/profile.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { InventoryComponent } from './workspace/inventory/inventory.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
     WorkspaceComponent,
     RegisterComponent,
     ProfileComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    InventoryComponent
   ],
   imports: [
     BrowserModule,

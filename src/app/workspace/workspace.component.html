@@ -1,7 +1,12 @@
-<div>
-        <canvas #canvas 
-        (mousedown)="stonesService.stoneTake($event)" 
-        (mouseup)="stonesService.stoneDrop($event)" 
-        (mousemove)="stonesService.stoneDrag($event)" 
-        width="500" height="500"></canvas>
+<div class="row">
+        <div class="col-md-3">
+                <app-inventory [inventory]="stonesInventory"></app-inventory>
+        </div>
+        <div class="col-md-9">
+                <div>
+                        <canvas #canvas (mousedown)="stonesService.stoneTake($event)" (mouseup)="stonesService.stoneDrop($event)"
+                                (mousemove)="stonesService.stoneDrag($event)" width="500" height="500"></canvas>
+                </div>
+        </div>
 </div>
+

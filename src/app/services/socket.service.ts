@@ -42,7 +42,6 @@ export class SocketService {
   }
 
   on(event_name) {
-    console.log(`listen to ${event_name}:`);
     return new Observable<any>(observer => {
       //  this.socket.off(event_name);
         this.socket.on(event_name, (data) => {
@@ -51,10 +50,8 @@ export class SocketService {
     });
   }
   private connected() {
-      console.log('Connected');
   }
   private disconnected() {
-      console.log('Disconnected');
   }
 
 }

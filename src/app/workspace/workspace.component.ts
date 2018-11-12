@@ -3,16 +3,6 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { StonesService } from './../services/stones.service';
 import { SocketService } from './../services/socket.service';
 
-interface IStone {
-  name: string;
-  color: string;
-  x: number;
-  y: number;
-  background: ImageData;
-  drag: boolean;
-}
-
-
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
@@ -22,36 +12,25 @@ interface IStone {
 export class WorkspaceComponent implements OnInit {
 
   title = 'Stone space';
-
+  stonesInventory;
 
   @ViewChild('canvas') canvasRef: ElementRef;
 
-  constructor(public stonesService: StonesService, public socket: SocketService) {
-
-    this.socket.emit('say_for_server', 'Hello Server').subscribe(
-      (data) => {
-        console.log('Success', data);
-      },
-      (error) => {
-        console.log('Error', error);
-      },
-      () => {
-        console.log('complete');
-      }
-    );
-
-    this.socket.on('customEmit').subscribe((data) => {
-      console.log(data);
-    });
-
+  constructor(
+    public stonesService: StonesService,
+    public socket: SocketService) {
   }
 
 
   async ngOnInit() {
-    await this.stonesService.getStones();
+    this.stonesService.getStones()
+    .subscribe(stones => {
+      this.stonesInventory = stones;
+    }
+      );
     this.stonesService.initSpace(this.canvasRef);
     this.stonesService.writeMessage(this.title, 10, 20);
-    this.stonesService.inventoryShow();
+    // this.stonesService.inventoryShow();
   }
 
 }
